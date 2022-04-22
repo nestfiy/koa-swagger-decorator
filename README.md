@@ -1,4 +1,4 @@
-# koa-swagger-decorator
+# koa-swagger-decorator2
 
 > using decorator to auto generate swagger json docs
 
@@ -8,7 +8,7 @@
 ## Installation
 
 ```bash
-npm install koa-swagger-decorator
+npm install koa-swagger-decorator2
 ```
 
 ## Contributing Guide
@@ -30,13 +30,13 @@ support both javascript (babel required) and typescript
 ```bash
 // using commonds below to start and test the example server
 
-git clone https://github.com/Cody2333/koa-swagger-decorator.git
+git clone https://github.com/nestfiy/koa-swagger-decorator2.git
 
-cd koa-swagger-decorator
+cd koa-swagger-decorator2
 
-npm install
+pnpm install
 
-npm run start
+pnpm start
 
 finally open:
 http://localhost:3000/api/swagger-html
@@ -44,9 +44,9 @@ http://localhost:3000/api/swagger-html
 
 ### Requirements
 
-- Koa2
-- @koa/router
-- typescript (or babel required)
+-   Koa2
+-   @koa/router
+-   typescript (or babel required)
 
 ```bash
 // add [transform-decorators-legacy] to .babelrc if using js
@@ -73,58 +73,58 @@ import Router from '@koa/router'
 
 import Test from './test'
 
-import { SwaggerRouter } from 'koa-swagger-decorator'
+import { SwaggerRouter } from 'koa-swagger-decorator2'
 
-const router = new SwaggerRouter([KoaRouterOpts],[SwaggerOpts]) // extends from koa-router
+const router = new SwaggerRouter([KoaRouterOpts], [SwaggerOpts]) // extends from koa-router
 
 // swagger docs avaliable at http://localhost:3000/api/swagger-html
 router.swagger({
-  title: 'Example Server',
-  description: 'API DOC',
-  version: '1.0.0',
+    title: 'Example Server',
+    description: 'API DOC',
+    version: '1.0.0',
 
-  // [optional] default is root path.
-  // if you are using koa-swagger-decorator within nested router, using this param to let swagger know your current router point
-  prefix: '/api',
+    // [optional] default is root path.
+    // if you are using koa-swagger-decorator within nested router, using this param to let swagger know your current router point
+    prefix: '/api',
 
-  // [optional] default is /swagger-html
-  swaggerHtmlEndpoint: '/swagger-html',
+    // [optional] default is /swagger-html
+    swaggerHtmlEndpoint: '/swagger-html',
 
-  // [optional] default is /swagger-json
-  swaggerJsonEndpoint: '/swagger-json',
+    // [optional] default is /swagger-json
+    swaggerJsonEndpoint: '/swagger-json',
 
-  // [optional] additional options for building swagger doc
-  // eg. add api_key as shown below
-  swaggerOptions: {
-    securityDefinitions: {
-      api_key: {
-        type: 'apiKey',
-        in: 'header',
-        name: 'api_key',
-      },
+    // [optional] additional options for building swagger doc
+    // eg. add api_key as shown below
+    swaggerOptions: {
+        securityDefinitions: {
+            api_key: {
+                type: 'apiKey',
+                in: 'header',
+                name: 'api_key'
+            }
+        }
     },
-  },
-  // [optional] additional configuration for config how to show swagger view
-  swaggerConfiguration: {
-    display: {
-      defaultModelsExpandDepth: 4, // The default expansion depth for models (set to -1 completely hide the models).
-      defaultModelExpandDepth: 3, // The default expansion depth for the model on the model-example section.
-      docExpansion: 'list', // Controls the default expansion setting for the operations and tags. 
-      defaultModelRendering: 'model' // Controls how the model is shown when the API is first rendered. 
+    // [optional] additional configuration for config how to show swagger view
+    swaggerConfiguration: {
+        display: {
+            defaultModelsExpandDepth: 4, // The default expansion depth for models (set to -1 completely hide the models).
+            defaultModelExpandDepth: 3, // The default expansion depth for the model on the model-example section.
+            docExpansion: 'list', // Controls the default expansion setting for the operations and tags.
+            defaultModelRendering: 'model' // Controls how the model is shown when the API is first rendered.
+        }
     }
-  }
 })
 // map all static methods at Test class for router
 // router.map(Test);
 
 // mapDir will scan the input dir, and automatically call router.map to all Router Class
 router.mapDir(_path.resolve(__dirname), {
-  // default: true. To recursively scan the dir to make router. If false, will not scan subroutes dir
-  // recursive: true,
-  // default: true, if true, you can call ctx.validatedBody[Query|Params] to get validated data.
-  // doValidation: true,
-  // default: [], paths to ignore while looking for decorators 
-  // ignore: ["**.spec.ts"],
+    // default: true. To recursively scan the dir to make router. If false, will not scan subroutes dir
+    // recursive: true,
+    // default: true, if true, you can call ctx.validatedBody[Query|Params] to get validated data.
+    // doValidation: true,
+    // default: [], paths to ignore while looking for decorators
+    // ignore: ["**.spec.ts"],
 })
 ```
 
@@ -134,119 +134,144 @@ router.mapDir(_path.resolve(__dirname), {
 // test.js
 
 import User from 'models/user'
-import { request, summary, query, path, body, tags } from 'koa-swagger-decorator'
+import {
+    request,
+    summary,
+    query,
+    path,
+    body,
+    tags
+} from 'koa-swagger-decorator2'
 
 const testTag = tags(['test'])
 
 const userSchema = {
-  name: { type: 'string', required: true },
-  gender: { type: 'string', required: false, example: 'male' },
-  groups: {
-    type: 'array',
-    required: true,
-    items: { type: 'string', example: 'group1' }, // item's type will also be validated
-  },
+    name: { type: 'string', required: true },
+    gender: { type: 'string', required: false, example: 'male' },
+    groups: {
+        type: 'array',
+        required: true,
+        items: { type: 'string', example: 'group1' } // item's type will also be validated
+    }
 }
 
 export default class Test {
-  @request('get', '/users')
-  @summary('get user list')
-  @security([{ api_key: [] }])
-  @testTag
-  @query({
-    type: { type: 'number', required: true, default: 1, description: 'type' },
-  })
-  static async getUsers(ctx) {
-    const users = await User.findAll()
-    ctx.body = { users }
-  }
+    @request('get', '/users')
+    @summary('get user list')
+    @security([{ api_key: [] }])
+    @testTag
+    @query({
+        type: {
+            type: 'number',
+            required: true,
+            default: 1,
+            description: 'type'
+        }
+    })
+    static async getUsers(ctx) {
+        const users = await User.findAll()
+        ctx.body = { users }
+    }
 
-  @request('get', '/users/{id}')
-  @summary('get user info by id')
-  @security([{ api_key: [] }])
-  @testTag
-  @path({
-    id: { type: 'number', required: true, default: 1, description: 'id' },
-  })
-  static async getUser(ctx) {
-    const { id } = ctx.validatedParams
-    const user = await User.findById(id)
-    ctx.body = { user }
-  }
+    @request('get', '/users/{id}')
+    @summary('get user info by id')
+    @security([{ api_key: [] }])
+    @testTag
+    @path({
+        id: { type: 'number', required: true, default: 1, description: 'id' }
+    })
+    static async getUser(ctx) {
+        const { id } = ctx.validatedParams
+        const user = await User.findById(id)
+        ctx.body = { user }
+    }
 
-  @request('post', '/users')
-  @testTag
-  @body(userSchema)
-  static async postUser(ctx) {
-    // const body = ctx.request.body;
-    const body = ctx.validatedBody
-    ctx.body = { result: body }
-  }
+    @request('post', '/users')
+    @testTag
+    @body(userSchema)
+    static async postUser(ctx) {
+        // const body = ctx.request.body;
+        const body = ctx.validatedBody
+        ctx.body = { result: body }
+    }
 
-  static async temp(ctx) {
-    ctx.body = { result: 'success' }
-  }
+    static async temp(ctx) {
+        ctx.body = { result: 'success' }
+    }
 }
 ```
 
-
 #### using decorator to make api body
+
 ```typescript
-import Router from '@koa/router';
-import { request, summary, query, path, body, tags, swaggerClass, swaggerProperty } from 'koa-swagger-decorator'
+import Router from '@koa/router'
+import {
+    request,
+    summary,
+    query,
+    path,
+    body,
+    tags,
+    swaggerClass,
+    swaggerProperty
+} from 'koa-swagger-decorator2'
 
 @swaggerClass()
 export class subObject {
-  @swaggerProperty({ type: "string", required: true }) Email: string = "";
-  @swaggerProperty({ type: "string", required: true }) NickName: string = "";
-  @swaggerProperty({ type: "string", required: true }) Password: string = "";
-};
+    @swaggerProperty({ type: 'string', required: true }) Email: string = ''
+    @swaggerProperty({ type: 'string', required: true }) NickName: string = ''
+    @swaggerProperty({ type: 'string', required: true }) Password: string = ''
+}
 
 @swaggerClass()
 export class userInfo {
-  @swaggerProperty({ type: "string", required: true }) Email: string = "";
-  @swaggerProperty({ type: "string", required: true }) NickName: string = "";
-  @swaggerProperty({ type: "string", required: true }) Password: string = "";
-  @swaggerProperty({type:"object",properties:(subObject as any).swaggerDocument}) UserInfo:subObject;
-};
+    @swaggerProperty({ type: 'string', required: true }) Email: string = ''
+    @swaggerProperty({ type: 'string', required: true }) NickName: string = ''
+    @swaggerProperty({ type: 'string', required: true }) Password: string = ''
+    @swaggerProperty({
+        type: 'object',
+        properties: (subObject as any).swaggerDocument
+    })
+    UserInfo: subObject
+}
 
 export default class Test {
-  @request('POST', '/user/Register')
-  @summary('register user')
-  @description('example of api')
-  @body((userInfo as any).swaggerDocument)
-  static async Register(ctx: Router.IRouterContext) {
-    var params = (ctx as any).validatedBody as userInfo;
-    console.log(params);
-  }
+    @request('POST', '/user/Register')
+    @summary('register user')
+    @description('example of api')
+    @body((userInfo as any).swaggerDocument)
+    static async Register(ctx: Router.IRouterContext) {
+        var params = (ctx as any).validatedBody as userInfo
+        console.log(params)
+    }
 }
 ```
 
 #### avaliable annotations
 
-- tags
-- query
-- path
-- body
-- formData
-- middlewares
-- security
-- summary
-- description
-- responses
-- deprecated
+-   tags
+-   query
+-   path
+-   body
+-   formData
+-   middlewares
+-   security
+-   summary
+-   description
+-   responses
+-   deprecated
 
 #### class annotations
 
-- orderAll
-- tagsAll
-- responsesAll
-- middlewaresAll
-- securityAll
-- deprecatedAll
-- queryAll
+-   orderAll
+-   tagsAll
+-   responsesAll
+-   middlewaresAll
+-   securityAll
+-   deprecatedAll
+-   queryAll
 
-``` javascript
+```javascript
 request // @request('POST', '/users')
 
 tags // @tags(['example'])
@@ -262,9 +287,9 @@ middlewares
 // support koa middlewares.
 // eg. @middlewares([func1,func2])
 
-security 
+security
 // define authentication method, key must be same as one of methods defined in swaggerOptions.securityDefinitions
-// @security([{ api_key: [] }]) 
+// @security([{ api_key: [] }])
 
 summary // @summary('api summary')
 
@@ -301,8 +326,8 @@ to turn off validation:
 
 ```javascript
 router.mapDir(_path.resolve(__dirname), {
-  // default: true, if true, you can call ctx.validatedBody[Query|Params] to get validated data.
-  doValidation: false,
+    // default: true, if true, you can call ctx.validatedBody[Query|Params] to get validated data.
+    doValidation: false
 })
 ```
 
@@ -313,26 +338,26 @@ router.mapDir(_path.resolve(__dirname), {
 ##### generate swagger.json without starting the server
 
 ```javascript
-import path from 'path';
-import { SwaggerRouter } from '../../dist';
+import path from 'path'
+import { SwaggerRouter } from '../../dist'
 
 // init router
-const router = new SwaggerRouter();
+const router = new SwaggerRouter()
 
 // load controllers
-router.mapDir(path.resolve(__dirname, '../routes'));
+router.mapDir(path.resolve(__dirname, '../routes'))
 
 // dump swagger json
 router.dumpSwaggerJson({
-  filename: 'swagger.json', // default is swagger.json
-  dir: process.cwd(), // default is process.cwd()
-});
+    filename: 'swagger.json', // default is swagger.json
+    dir: process.cwd() // default is process.cwd()
+})
 ```
 
 ## License
 
 © MIT
 
-[npm-url]: https://npmjs.org/package/koa-swagger-decorator
+[npm-url]: https://npmjs.org/package/koa-swagger-decorator2
 [travis-image]: https://travis-ci.org/Cody2333/koa-swagger-decorator.svg?branch=develop
 [travis-url]: https://travis-ci.org/Cody2333/koa-swagger-decorator
