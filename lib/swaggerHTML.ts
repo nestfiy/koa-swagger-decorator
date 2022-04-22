@@ -1,35 +1,41 @@
-function parseSimpleConfig(config: {[name: string]: any} = {}) {
-    return Object.keys(config).map(key => {
-        const value: any = config[key];
-        if(value === null) {
-            return `${key}: null,`;
-        }
-        if (typeof value === 'string') {
-            return `${key}: '${value}',`;
-        }
-        if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'function') {
-            return `${key}: ${value},`;
-        }
-        if (typeof value === 'object') {
-          return `${key}: ${JSON.stringify(value)},`
-        }
-    }).join('\n\t  ');
+function parseSimpleConfig(config: { [name: string]: any } = {}) {
+    return Object.keys(config)
+        .map(key => {
+            const value: any = config[key]
+            if (value === null) {
+                return `${key}: null,`
+            }
+            if (typeof value === 'string') {
+                return `${key}: '${value}',`
+            }
+            if (
+                typeof value === 'number' ||
+                typeof value === 'boolean' ||
+                typeof value === 'function'
+            ) {
+                return `${key}: ${value},`
+            }
+            if (typeof value === 'object') {
+                return `${key}: ${JSON.stringify(value)},`
+            }
+        })
+        .join('\n\t  ')
 }
 
-const swaggerHTML = (apiPath: string, options: { swaggerVersion?: string, [name: string]: any } = {}) => {
-    const {
-        swaggerVersion = '3.21.0',
-        display = {},
-    } = options;
-  const result = `
+const swaggerHTML = (
+    apiPath: string,
+    options: { swaggerVersion?: string; [name: string]: any } = {}
+) => {
+    const { swaggerVersion = '4.10.3', display = {} } = options
+    const result = `
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Swagger UI</title>
-  <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
-  <link href="//cdnjs.cloudflare.com/ajax/libs/swagger-ui/${swaggerVersion}/swagger-ui.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/${swaggerVersion}/swagger-ui.css" rel="stylesheet">
 
   <style>
     html
@@ -104,6 +110,8 @@ const swaggerHTML = (apiPath: string, options: { swaggerVersion?: string, [name:
         SwaggerUIBundle.plugins.DownloadUrl
       ],
       layout: "StandaloneLayout",
+      queryConfigEnabled: true,
+      persistAuthorization: true,
       ${parseSimpleConfig(display)}
     })
     window.ui = ui
@@ -113,8 +121,8 @@ const swaggerHTML = (apiPath: string, options: { swaggerVersion?: string, [name:
 
 </html>
 
-`;
-  return result;
-};
-export default swaggerHTML;
-export { swaggerHTML };
+`
+    return result
+}
+export default swaggerHTML
+export { swaggerHTML }

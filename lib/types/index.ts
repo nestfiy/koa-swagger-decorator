@@ -1,5 +1,5 @@
 export interface Data {
-  [key: string]: {
-    [name: string]: any;
-  };
+    [key: string]: {
+        [name: string]: any
+    }
 }

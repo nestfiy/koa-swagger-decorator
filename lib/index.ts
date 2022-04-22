@@ -1,13 +1,10 @@
-export * from './decorators';
-import Doc from './decorators';
-import { wrapper, SwaggerRouter, Context } from './wrapper';
-export * from './swaggerPropertyHelper';
+export * from './decorators'
+import Doc from './decorators'
+import { wrapper, SwaggerRouter, Context } from './wrapper'
+export * from './swaggerPropertyHelper'
 
-export {
-  wrapper,
-  SwaggerRouter,
-};
+export { wrapper, SwaggerRouter }
 
-export { Context };
+export { Context }
 
-export default Doc;
+export default Doc

@@ -7,28 +7,28 @@
  */
 
 export default (
-  title = 'API DOC',
-  description = 'API DOC',
-  version = '1.0.0',
-  options = {}
+    title = 'API DOC',
+    description = 'API DOC',
+    version = '1.0.0',
+    options = {}
 ) =>
-  Object.assign(
-    {
-      info: { title, description, version },
-      paths: {},
-      responses: {}
-    },
-    {
-      definitions: {},
-      tags: [],
-      swagger: '2.0',
-      securityDefinitions: {
-        ApiKeyAuth: {
-          type: 'apiKey',
-          in: 'header',
-          name: 'Authorization'
-        }
-      }
-    },
-    options
-  );
+    Object.assign(
+        {
+            info: { title, description, version },
+            paths: {},
+            responses: {}
+        },
+        {
+            definitions: {},
+            tags: [],
+            swagger: '2.0',
+            securityDefinitions: {
+                ApiKeyAuth: {
+                    type: 'apiKey',
+                    in: 'header',
+                    name: 'Authorization'
+                }
+            }
+        },
+        options
+    )

@@ -1,1 +1,1 @@
-declare module 'is-type-of';
+declare module 'is-type-of'
