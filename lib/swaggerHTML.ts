@@ -102,6 +102,7 @@ const swaggerHTML = (
     const ui = SwaggerUIBundle({
       url: "${apiPath}",
       dom_id: '#swagger-ui',
+      deepLinking: true,
       presets: [
         SwaggerUIBundle.presets.apis,
         SwaggerUIStandalonePreset
@@ -112,6 +113,7 @@ const swaggerHTML = (
       layout: "StandaloneLayout",
       queryConfigEnabled: true,
       persistAuthorization: true,
+      validatorUrl: "https://validator.swagger.io/validator",
       ${parseSimpleConfig(display)}
     })
     window.ui = ui

@@ -12,7 +12,7 @@ const app = new Koa()
 
 app.use(cors())
     .use(serve('.'))
-    .use(bodyParser({ urlencoded: true, json: true }))
+    .use(bodyParser({ multipart: true }))
     .use(errorHandle())
     .use(router.routes())
     .use(router.allowedMethods())
